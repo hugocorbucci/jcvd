@@ -26,7 +26,9 @@ module ThoughtWorks
         end
       else
         tokens = name.split(" ")
-        first, *middles, last = tokens
+        first = tokens.first
+        last = tokens.last
+        middles = tokens - first - last
 
         return search ([first] + middles[0..-2] + [last]).join(" "), region if middles.size > 0
         {}

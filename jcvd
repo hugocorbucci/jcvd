@@ -1,5 +1,12 @@
 #!/usr/bin/env ruby
 
+require 'rubygems'
+
+# Set up gems listed in the Gemfile.
+ENV['BUNDLE_GEMFILE'] ||= File.expand_path('../Gemfile', __FILE__)
+
+require 'bundler/setup' if File.exists?(ENV['BUNDLE_GEMFILE'])
+
 require 'yaml'
 require 'erb'
 require 'json'
@@ -105,7 +112,7 @@ def email(badguy, subject, body, dryrun = false)
   else
     begin
       if dryrun
-        puts "Sending email to #{badguy['email']} with subject 'subject.strip' and body:"
+        puts "Sending email to #{badguy['email']} with subject '#{subject.strip}' and body:"
         puts body
       else
         Pony.mail(:to => badguy["email"], :via => :smtp, :via_options => {
@@ -126,7 +133,7 @@ end
 
 actions = opts.select { |k, v| v && [:sms, :call, :email].include?(k) }
 unless actions.empty?
-  gerunds = actions.keys.collect { |a| "#{a}ing" }
+  gerunds = actions.map(&:first).collect { |a| "#{a}ing" }
   if gerunds.size > 1
     sentence = gerunds[0..-2].join(", ").capitalize + " and " + gerunds[-1]
   else

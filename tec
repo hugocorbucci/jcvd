@@ -1,9 +1,18 @@
 #!/usr/bin/env ruby
 
+require 'rubygems'
+
+# Set up gems listed in the Gemfile.
+ENV['BUNDLE_GEMFILE'] ||= File.expand_path('../Gemfile', __FILE__)
+
+require 'bundler/setup' if File.exists?(ENV['BUNDLE_GEMFILE'])
+
 require 'yaml'
 require 'json'
+require 'erb'
 require 'logger'
 require 'trollop'
+require './config_helper'
 
 require './gab'
 require './timesheets'
@@ -25,7 +34,7 @@ today = Time.now
 
 one_day_in_seconds = 86400
 
-if today.monday?
+if today.wday == 1
   due_date = Time.at(today.to_i - one_day_in_seconds)
 elsif APP_CONFIG['week'] == 'prev'
   days_since_sunday = today.wday
