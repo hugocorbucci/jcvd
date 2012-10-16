@@ -30,7 +30,7 @@ module ThoughtWorks
         last = tokens.last
         middles = tokens[1...-1]
 
-        return search ([first] + middles[0..-2] + [last]).join(" "), region if middles.size > 0
+        return search(([first] + middles[0..-2] + [last]).join(" "), region) if middles.size > 0
         {}
       end
     end
